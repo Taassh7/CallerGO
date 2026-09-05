@@ -7,7 +7,7 @@ app = FastAPI()
 # Słownik tymczasowy na kody: {"123456": {"status": "pending", "psid": None}}
 pending_codes = {}
 
-VERIFY_TOKEN = "tajnytokenhehe" # Token do wpisania w panelu Meta Developers
+VERIFY_TOKEN = "fnaf_fajny_jes_hehe" # Token do wpisania w panelu Meta Developers
 
 # 0. Strona główna (żeby sprawdzić czy serwer żyje)
 @app.get("/")
