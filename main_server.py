@@ -1,5 +1,5 @@
 import os
-import request
+import requests
 import uvicorn
 from fastapi import FastAPI, Request, Response
 
@@ -66,23 +66,18 @@ async def receive_message(request: Request):
 # Nazwa użytkownika
 @app.get("/api/get-username/{psid}")
 def get_username(psid: str):
-    token = os.environ.get("PAGE_ACCESS_TOKEN")
-    
-    if not token:
-        print("[FB API BŁĄD] Brak zmiennej PAGE_ACCESS_TOKEN na Renderze!")
+    """Pobiera imię użytkownika z Facebook Graph API."""
+    if not PAGE_ACCESS_TOKEN or PAGE_ACCESS_TOKEN == "TUTAJ_WKLEJ_SWOJ_TOKEN":
         return {"name": None}
     
     try:
-        url = f"https://graph.facebook.com/v19.0/{psid}?fields=first_name,name&access_token={token}"
+        url = f"https://graph.facebook.com/v19.0/{psid}?fields=first_name,name&access_token={PAGE_ACCESS_TOKEN}"
         res = requests.get(url, timeout=5).json()
         
-        # DRUKUJEMY ODPOWIEDŹ W LOGACH RENDERA:
-        print(f"[FB API ODPOWIEDŹ]: {res}")
-        
+        # Pobieramy najpierw pierwsze imię (first_name), a jeśli go nie ma - pełne imię (name)
         user_name = res.get("first_name") or res.get("name")
         return {"name": user_name}
-    except Exception as e:
-        print(f"[FB API EXCEPTION]: {e}")
+    except Exception:
         return {"name": None}
 
 if __name__ == "__main__":
