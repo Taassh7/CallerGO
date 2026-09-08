@@ -1,6 +1,7 @@
 import os
-from fastapi import FastAPI, Request, Response
+import request
 import uvicorn
+from fastapi import FastAPI, Request, Response
 
 app = FastAPI()
 
@@ -8,6 +9,7 @@ app = FastAPI()
 pending_codes = {}
 
 VERIFY_TOKEN = "fnaf_fajny_jes_hehe" # Token do wpisania w panelu Meta Developers
+PAGE_ACCESS_TOKEN = os.environ.get("PAGE_ACCESS_TOKEN", "EAAR3ed9mDEsBRp24lqYYs8p5KpZCHwfLo771XxQPBwH7czoVZCQUyJp3e9bGWDaQCVp0TZCLaBGkRAXLf3uw4BI0SQFV3SQ0GoLrFd9EUXZAH2LrUS9ht0EhPhE9JomVba9QJnUVMuErlDsIqhnrldPZAu1kuGgtvRDdkIsXRaBNs38wAI85UuPQhHbNYe1tmLe5Lbw3sfsHIZCTRKpO6JjwZDZD")
 
 # 0. Strona główna (żeby sprawdzić czy serwer żyje)
 @app.get("/")
@@ -60,6 +62,23 @@ async def receive_message(request: Request):
 
         return Response(content="EVENT_RECEIVED", status_code=200)
     return Response(status_code=404)
+
+# Nazwa użytkownika
+@app.get("/api/get-username/{psid}")
+def get_username(psid: str):
+    """Pobiera imię użytkownika z Facebook Graph API."""
+    if not PAGE_ACCESS_TOKEN or PAGE_ACCESS_TOKEN == "TUTAJ_WKLEJ_SWOJ_TOKEN":
+        return {"name": None}
+    
+    try:
+        url = f"https://graph.facebook.com/v19.0/{psid}?fields=first_name,name&access_token={PAGE_ACCESS_TOKEN}"
+        res = requests.get(url, timeout=5).json()
+        
+        # Pobieramy najpierw pierwsze imię (first_name), a jeśli go nie ma - pełne imię (name)
+        user_name = res.get("first_name") or res.get("name")
+        return {"name": user_name}
+    except Exception:
+        return {"name": None}
 
 if __name__ == "__main__":
     # POBIERANIE PORTU Z RENDER LUB DOMYŚLNIE 8000 LOKALNIE
