@@ -67,7 +67,7 @@ async def receive_message(request: Request):
 @app.get("/api/get-username/{psid}")
 def get_username(psid: str):
     """Pobiera imię użytkownika z Facebook Graph API."""
-    if not PAGE_ACCESS_TOKEN or PAGE_ACCESS_TOKEN == "TUTAJ_WKLEJ_SWOJ_TOKEN":
+    if not PAGE_ACCESS_TOKEN or PAGE_ACCESS_TOKEN == "EAAR3ed9mDEsBRp24lqYYs8p5KpZCHwfLo771XxQPBwH7czoVZCQUyJp3e9bGWDaQCVp0TZCLaBGkRAXLf3uw4BI0SQFV3SQ0GoLrFd9EUXZAH2LrUS9ht0EhPhE9JomVba9QJnUVMuErlDsIqhnrldPZAu1kuGgtvRDdkIsXRaBNs38wAI85UuPQhHbNYe1tmLe5Lbw3sfsHIZCTRKpO6JjwZDZD":
         return {"name": None}
     
     try:
